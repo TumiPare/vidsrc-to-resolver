@@ -1,5 +1,6 @@
 import base64
 import subprocess
+import platform
 from typing import Union
 
 # Helper methods
@@ -7,7 +8,8 @@ class Utilities:
     @staticmethod
     def check_mpv_exists() -> bool:
         try:
-            subprocess.run(['mpv', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            commands = ['command', '-v', 'mpv'] if platform.system() == 'Linux' else ['mpv', '--version']
+            subprocess.run(commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
             return True
         except subprocess.CalledProcessError:
             return False

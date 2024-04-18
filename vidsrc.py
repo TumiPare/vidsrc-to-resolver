@@ -2,6 +2,8 @@ import os
 import argparse
 import requests
 import questionary
+import subprocess
+import platform
 
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
@@ -10,6 +12,7 @@ from typing import Optional, Tuple, Dict, List
 from sources.vidplay import VidplayExtractor
 from sources.filemoon import FilemoonExtractor
 from utils import Utilities, VidSrcError, NoSourcesFound
+
 
 SUPPORTED_SOURCES = ["Vidplay", "Filemoon"]
 
@@ -230,5 +233,12 @@ if __name__ == "__main__":
         if selection != "None":
             mpv_cmd += f"--sub-file=\"{subtitles.get(selection)}\" "
 
-    mpv_cmd += f"--http-header-fields=\"Referer: {source_url}\""
-    os.system(mpv_cmd)
+    if platform.system() == 'Linux' and subprocess.check_output(['uname', '-o']).strip() == b'Android':
+        command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", {source_url}, "-n", "is.xyz.mpv/.MPVActivity"]
+        try:
+            subprocess.run(command, check=True, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to execute command: {e}")
+    else:
+        mpv_cmd += f"--http-header-fields=\"Referer: {source_url}\""
+        os.system(mpv_cmd)
