@@ -234,7 +234,7 @@ if __name__ == "__main__":
             mpv_cmd += f"--sub-file=\"{subtitles.get(selection)}\" "
 
     if platform.system() == 'Linux' and subprocess.check_output(['uname', '-o']).strip() == b'Android':
-        command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", {source_url}, "-n", "is.xyz.mpv/.MPVActivity"]
+        command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", source_url, "-n", "is.xyz.mpv/.MPVActivity"]
         try:
             subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         except subprocess.CalledProcessError as e:
