@@ -213,6 +213,7 @@ if __name__ == "__main__":
     stream = questionary.select("Select Stream", choices=streams).unsafe_ask() if len(streams) > 1 else streams[0]
     mpv_cmd = f"mpv "
     
+    print(stream)
     if args.fullscreen:
         mpv_cmd += "--fs "
 
@@ -234,11 +235,12 @@ if __name__ == "__main__":
             mpv_cmd += f"--sub-file=\"{subtitles.get(selection)}\" "
 
     if platform.system() == 'Linux' and subprocess.check_output(['uname', '-o']).strip() == b'Android':
-        command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", source_url, "-n", "is.xyz.mpv/.MPVActivity"]
+        command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", stream, "-n", "is.xyz.mpv/.MPVActivity"]
         try:
             subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         except subprocess.CalledProcessError as e:
             print(f"Failed to execute command: {e}")
     else:
+        print(source_url)
         mpv_cmd += f"--http-header-fields=\"Referer: {source_url}\""
         os.system(mpv_cmd)
