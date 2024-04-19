@@ -17,7 +17,7 @@ am start -a android.intent.action.VIEW \
     --grant-read-uri-permission \
     --grant-write-uri-permission \
     --es subs "https://rapidcdn.cc/sub/cache/subtitle/13774437.vtt" \
-    --es subs.enable "<subtitle_link>" \
+    --es subs.enable "https://rapidcdn.cc/sub/cache/subtitle/13774437.vtt"  \
     --es position 0 \
     is.xyz.mpv
 
@@ -28,5 +28,3 @@ if [ $? -eq 0 ]; then
 else
     echo "An error occurred while executing the command."
 fi
-
-am start -a android.intent.action.VIEW -t video/any -p is.xyz.mpv -d "https://example.org/media.png" 
