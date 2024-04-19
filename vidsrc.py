@@ -234,6 +234,7 @@ if __name__ == "__main__":
         if selection != "None":
             mpv_cmd += f"--sub-file=\"{subtitles.get(selection)}\" "
 
+    print(subtitles.get(selection))
     if platform.system() == 'Linux' and subprocess.check_output(['uname', '-o']).strip() == b'Android':
         # command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", stream, "-n", "is.xyz.mpv/.MPVActivity"]
         command = [
@@ -251,6 +252,5 @@ if __name__ == "__main__":
         except subprocess.CalledProcessError as e:
             print(f"Failed to execute command: {e}")
     else:
-        print(source_url)
         mpv_cmd += f"--http-header-fields=\"Referer: {source_url}\""
         os.system(mpv_cmd)
