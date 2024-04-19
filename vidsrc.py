@@ -222,10 +222,10 @@ if __name__ == "__main__":
 
     mpv_cmd += f"\"{stream}\" "
 
+    selection = args.default_subtitles
     if subtitles:
         subtitle_list = list(subtitles.keys())
         subtitle_list.append("None")
-        selection = args.default_subtitles
         
         if not selection:
             print("[>] This can be skipped by passing --default-subtitles  DEFAULT_SUBTITLES")
@@ -235,7 +235,17 @@ if __name__ == "__main__":
             mpv_cmd += f"--sub-file=\"{subtitles.get(selection)}\" "
 
     if platform.system() == 'Linux' and subprocess.check_output(['uname', '-o']).strip() == b'Android':
-        command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", stream, "-n", "is.xyz.mpv/.MPVActivity"]
+        # command = ["am", "start", "--user", "0", "-a", "android.intent.action.VIEW", "-d", stream, "-n", "is.xyz.mpv/.MPVActivity"]
+        command = [
+            'am',
+            'start',
+            '-a', 'android.intent.action.VIEW',
+            '-d', stream,
+            '--eu', 'subs', subtitles.get(selection),
+            '--esn', 'subs.enable',
+            '--ei', 'decode_mode', '2',
+            '-n', 'is.xyz.mpv/.MPVActivity'
+        ]
         try:
             subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         except subprocess.CalledProcessError as e:
