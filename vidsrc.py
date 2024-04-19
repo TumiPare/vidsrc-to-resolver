@@ -247,7 +247,7 @@ if __name__ == "__main__":
             '-n', 'is.xyz.mpv/.MPVActivity'
         ]
         try:
-            subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(command, check=True)
         except subprocess.CalledProcessError as e:
             print(f"Failed to execute command: {e}")
     else:
